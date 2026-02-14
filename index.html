@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sretno Valentinovo 💌</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --deep-night: #0a0e27;
+            --star-white: #fffef7;
+            --soft-gold: #d4af37;
+            --whisper-blue: #b8c5d6;
+            --cosmic-purple: #4a3f5c;
+        }
+
+        body {
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--star-white);
+            cursor: crosshair;
+            position: relative;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        /* Different star sizes for depth */
+        .star.small {
+            width: 1px;
+            height: 1px;
+        }
+        
+        .star.medium {
+            width: 2px;
+            height: 2px;
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+        }
+        
+        .star.large {
+            width: 3px;
+            height: 3px;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+        }
+        
+        /* Pulsing stars */
+        .star.pulse {
+            animation: pulse 4s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { 
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 1;
+                transform: scale(1.5);
+            }
+        }
+
+        /* Regular twinkling */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        
+        /* Fast twinkle for some stars */
+        .star.fast-twinkle {
+            animation: fastTwinkle 1.5s infinite;
+        }
+        
+        @keyframes fastTwinkle {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 1; }
+        }
+        
+        /* Slow drift animation */
+        .star.drift {
+            animation: drift 60s linear infinite;
+        }
+        
+        @keyframes drift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(100px, -50px); }
+        }
+
+        /* Glow stars */
+        .star.glow {
+            box-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+            animation: colorShift 8s infinite;
+        }
+        
+        @keyframes colorShift {
+            0%, 100% { color: #ffffff; }
+            33% { color: #b8c5d6; }
+            66% { color: #d4af37; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .constellation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .constellation-line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--soft-gold), transparent);
+            transform-origin: left center;
+            opacity: 0;
+            animation: drawLine 2s ease-out forwards;
+        }
+
+        @keyframes drawLine {
+            to { opacity: 0.3; }
+        }
+        
+        /* Animated constellation lines that pulse */
+        .constellation-line.animated {
+            animation: drawLine 2s ease-out forwards, pulseLine 6s ease-in-out infinite 2s;
+        }
+        
+        @keyframes pulseLine {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.5; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 8vh 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+            opacity: 0;
+            animation: fadeInDown 1.5s ease-out 0.5s forwards;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .date-label {
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--whisper-blue);
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--soft-gold);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--whisper-blue);
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        .poem-container {
+            background: rgba(10, 14, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 4px;
+            padding: 3rem 2.5rem;
+            margin: 2rem 0;
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 1s forwards;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .poem-container::before {
+            content: '✦';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            color: var(--soft-gold);
+        }
+
+        .poem {
+            font-size: 1.25rem;
+            line-height: 2;
+            text-align: center;
+            font-style: italic;
+            white-space: pre-line;
+            color: var(--star-white);
+            letter-spacing: 0.02em;
+        }
+
+        .hidden-messages {
+            margin-top: 4rem;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 2s forwards;
+        }
+
+        .instruction {
+            text-align: center;
+            font-size: 0.95rem;
+            color: var(--whisper-blue);
+            margin-bottom: 2rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 300;
+        }
+
+        .message-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .message-card {
+            background: transparent;
+            height: 280px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .message-card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+        }
+
+        .card-front {
+            background: rgba(74, 63, 92, 0.3);
+            border: 1px solid rgba(184, 197, 214, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-direction: column;
+        }
+
+        .message-card:hover .card-front {
+            border-color: var(--soft-gold);
+            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.2);
+        }
+
+        .card-back {
+            background: rgba(10, 14, 39, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            transform: rotateY(180deg);
+            overflow: hidden;
+        }
+
+        .message-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .message-text {
+            font-size: 1rem;
+            color: var(--star-white);
+            line-height: 1.6;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 5rem;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 2.5s forwards;
+        }
+
+        .signature {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-style: italic;
+            color: var(--soft-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .final-note {
+            font-size: 0.95rem;
+            color: var(--whisper-blue);
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .poem-container {
+                padding: 2rem 1.5rem;
+            }
+            
+            .poem {
+                font-size: 1.1rem;
+            }
+            
+            .message-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .shooting-star {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px white;
+            animation: shoot 3s ease-out;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        @keyframes shoot {
+            0% {
+                transform: rotate(-45deg) translateX(0);
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(-45deg) translateX(1000px);
+                opacity: 0;
+            }
+        }
+        
+        /* Enhanced shooting stars with trails */
+        .shooting-star::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 2px;
+            width: 100px;
+            background: linear-gradient(90deg, white, transparent);
+            border-radius: 50%;
+        }
+        
+        /* Occasional bright shooting star */
+        .shooting-star.bright {
+            width: 3px;
+            height: 3px;
+            box-shadow: 0 0 20px 4px white;
+        }
+        
+        .shooting-star.bright::after {
+            width: 150px;
+            background: linear-gradient(90deg, rgba(212, 175, 55, 1), rgba(255, 255, 255, 0.5), transparent);
+        }
+        
+        /* Nebula effect - subtle animated background clouds */
+        .nebula {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 0;
+            animation: nebulaDrift 30s ease-in-out infinite;
+        }
+        
+        @keyframes nebulaDrift {
+            0%, 100% { 
+                opacity: 0.03;
+                transform: translate(0, 0) scale(1);
+            }
+            50% { 
+                opacity: 0.08;
+                transform: translate(50px, -30px) scale(1.2);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    <div class="constellation" id="constellation"></div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="date-label">14. veljače 2026.</div>
+            <h1>Andrea</h1>
+            <div class="subtitle">moje sve na svijetu</div>
+        </div>
+
+        <div class="poem-container">
+            <div class="poem">
+                Htio sam ti napisati pjesmu
+                Ali mi fale riječi
+                Ne znam kako reći sve što osjećam
+                A da ne ponovim tisućiti put
+                
+                Znaš da sam s tobom
+                Najsretniji što sam ikada bio
+                Da je najfinija kava ona koju pijem s tobom
+                Da najljepše spavam dok smo zajedno u našem krevetu
+                
+                Ovo nije pjesma, nego zahvala
+                Hvala ti što me činis tako sretnim
+                Što si posebna, puna ljubavi i svjetlosti
+                Što me svaki dan s tobom ispunja osjećajem koji je iznad riječi
+                
+                Hvala ti što si moja
+                ❤️
+            </div>
+        </div>
+
+        <div class="hidden-messages">
+            <div class="instruction">За мен всеки ден е Свети Валентин с теб. Ето няколко спомена.</div>
+            <div class="message-grid">
+                <div class="message-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <span class="message-icon">🌙</span>
+                            <div class="message-text">Все още не знам за какво е това...</div>
+                        </div>
+                        <div class="card-back">
+                            <img src="mekata.jpg" alt="Memory" class="card-image">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="message-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <span class="message-icon">✨</span>
+                            <div class="message-text">Не плачи, ако не успеем да го направим...</div>
+                        </div>
+                        <div class="card-back">
+                            <img src="snjegovici.jpg" alt="Memory" class="card-image">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="message-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <span class="message-icon">💫</span>
+                            <div class="message-text">Но ние винаги правим това по правилния начин...</div>
+                        </div>
+                        <div class="card-back">
+                            <img src="pizza.jpg" alt="Memory" class="card-image">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="message-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <span class="message-icon">🌟</span>
+                            <div class="message-text">Знам, че ти много липсва...</div>
+                        </div>
+                        <div class="card-back">
+                            <img src="cukic.jpg" alt="Memory" class="card-image">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="message-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <span class="message-icon">🌕</span>
+                            <div class="message-text">Ще полудееш, ако ядеш...</div>
+                        </div>
+                        <div class="card-back">
+                            <img src="avocado.jpeg" alt="Memory" class="card-image">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="message-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <span class="message-icon">☀️</span>
+                            <div class="message-text">Най-вкусната торта! Обичам те!</div>
+                        </div>
+                        <div class="card-back">
+                            <img src="torta.jpg" alt="Memory" class="card-image">
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="signature">Обичам те най-много на света,</div>
+            <div class="final-note">Твой Давид</div>
+        </div>
+    </div>
+
+    <script>
+        // Generate enhanced starfield with variety
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numberOfStars = 300; // Increased for richer sky
+            
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Random size
+                const sizeRand = Math.random();
+                if (sizeRand < 0.6) {
+                    star.classList.add('small');
+                } else if (sizeRand < 0.9) {
+                    star.classList.add('medium');
+                } else {
+                    star.classList.add('large');
+                }
+                
+                // Random animation types for variety
+                const animRand = Math.random();
+                if (animRand < 0.15) {
+                    star.classList.add('pulse');
+                } else if (animRand < 0.3) {
+                    star.classList.add('fast-twinkle');
+                } else if (animRand < 0.4) {
+                    star.classList.add('glow');
+                }
+                
+                // Some stars drift slowly
+                if (Math.random() < 0.1) {
+                    star.classList.add('drift');
+                }
+                
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (2 + Math.random() * 4) + 's';
+                starsContainer.appendChild(star);
+            }
+            
+            // Add subtle nebula clouds
+            createNebulas();
+        }
+        
+        // Create nebula background effects
+        function createNebulas() {
+            const colors = [
+                'rgba(74, 63, 92, 0.4)',
+                'rgba(27, 39, 53, 0.3)',
+                'rgba(184, 197, 214, 0.2)'
+            ];
+            
+            for (let i = 0; i < 3; i++) {
+                const nebula = document.createElement('div');
+                nebula.className = 'nebula';
+                nebula.style.width = (300 + Math.random() * 400) + 'px';
+                nebula.style.height = (300 + Math.random() * 400) + 'px';
+                nebula.style.background = colors[i];
+                nebula.style.left = Math.random() * 100 + '%';
+                nebula.style.top = Math.random() * 100 + '%';
+                nebula.style.animationDelay = i * 10 + 's';
+                nebula.style.animationDuration = (25 + Math.random() * 20) + 's';
+                document.body.appendChild(nebula);
+            }
+        }
+
+        // Create constellation effect with animated lines
+        function createConstellation() {
+            const constellation = document.getElementById('constellation');
+            const points = [];
+            
+            // Create random points
+            for (let i = 0; i < 12; i++) { // More points for richer constellation
+                points.push({
+                    x: Math.random() * 100,
+                    y: Math.random() * 100
+                });
+            }
+            
+            // Connect some points
+            for (let i = 0; i < points.length - 1; i++) {
+                if (Math.random() > 0.4) { // More connections
+                    const line = document.createElement('div');
+                    line.className = 'constellation-line';
+                    
+                    // Some lines are animated
+                    if (Math.random() < 0.5) {
+                        line.classList.add('animated');
+                    }
+                    
+                    const x1 = points[i].x;
+                    const y1 = points[i].y;
+                    const x2 = points[i + 1].x;
+                    const y2 = points[i + 1].y;
+                    
+                    const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                    const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+                    
+                    line.style.width = length + 'vw';
+                    line.style.left = x1 + '%';
+                    line.style.top = y1 + '%';
+                    line.style.transform = `rotate(${angle}deg)`;
+                    line.style.animationDelay = (i * 0.2) + 's';
+                    
+                    constellation.appendChild(line);
+                }
+            }
+        }
+
+        // Enhanced shooting star effect with variation
+        function createShootingStar() {
+            const star = document.createElement('div');
+            star.className = 'shooting-star';
+            
+            // Occasionally make it brighter
+            if (Math.random() < 0.3) {
+                star.classList.add('bright');
+            }
+            
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 50 + '%';
+            
+            // Vary the speed
+            const duration = 2 + Math.random() * 2;
+            star.style.animationDuration = duration + 's';
+            
+            document.body.appendChild(star);
+            
+            setTimeout(() => star.remove(), duration * 1000);
+        }
+
+        // Flip card function
+        function flipCard(card) {
+            card.classList.toggle('flipped');
+        }
+
+        // Initialize
+        createStars();
+        createConstellation();
+        
+        // More frequent shooting stars with variation
+        setInterval(() => {
+            if (Math.random() > 0.6) {
+                createShootingStar();
+            }
+        }, 2000);
+        
+        // Occasional burst of shooting stars
+        setInterval(() => {
+            if (Math.random() > 0.9) {
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => createShootingStar(), i * 300);
+                }
+            }
+        }, 10000);
+
+        // Easter egg: click anywhere to create a small star burst
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.message-card')) {
+                const burst = document.createElement('div');
+                burst.style.position = 'fixed';
+                burst.style.left = e.clientX + 'px';
+                burst.style.top = e.clientY + 'px';
+                burst.style.width = '6px';
+                burst.style.height = '6px';
+                burst.style.background = 'var(--soft-gold)';
+                burst.style.borderRadius = '50%';
+                burst.style.pointerEvents = 'none';
+                burst.style.boxShadow = '0 0 10px var(--soft-gold)';
+                burst.style.animation = 'twinkle 1s ease-out';
+                burst.style.zIndex = '100';
+                document.body.appendChild(burst);
+                setTimeout(() => burst.remove(), 1000);
+                
+                // Create small sparkles around the click
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        const sparkle = document.createElement('div');
+                        sparkle.style.position = 'fixed';
+                        sparkle.style.left = (e.clientX + (Math.random() - 0.5) * 40) + 'px';
+                        sparkle.style.top = (e.clientY + (Math.random() - 0.5) * 40) + 'px';
+                        sparkle.style.width = '2px';
+                        sparkle.style.height = '2px';
+                        sparkle.style.background = 'white';
+                        sparkle.style.borderRadius = '50%';
+                        sparkle.style.pointerEvents = 'none';
+                        sparkle.style.animation = 'twinkle 0.8s ease-out';
+                        sparkle.style.zIndex = '100';
+                        document.body.appendChild(sparkle);
+                        setTimeout(() => sparkle.remove(), 800);
+                    }, i * 50);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
